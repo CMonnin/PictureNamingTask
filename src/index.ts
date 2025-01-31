@@ -1,14 +1,18 @@
 import { experimentSettingsJson } from "./experimentSettings.ts";
 import { useJsonState } from "./globalState.ts";
 import { pictureNamingTask } from "./pictureNamingTask.ts";
-import { $ExperimentResults } from "./schemas.ts";
+import { $ExperimentResults, $Settings } from "./schemas.ts";
+import { translator } from "./translator.ts";
 
 import type { Language } from "/runtime/v1/@opendatacapture/runtime-core";
 
 import "/runtime/v1/jspsych@8.x/css/jspsych.css";
 
-import { defineInstrument } from "/runtime/v1/@opendatacapture/runtime-core";
+import { z } from "/runtime/v1/zod@3.23.x";
 
+const { defineInstrument } = await import(
+  "/runtime/v1/@opendatacapture/runtime-core/index.js"
+);
 // the ODC playground uses the index.ts file while deploying locally used main.ts
 // this next block allows the program to read from the json rather than the csv files
 if (!useJsonState.value) {
@@ -25,6 +29,17 @@ export default defineInstrument({
   tags: ["interactive", "jsPysch", "PictureNamingTask"],
   content: {
     async render(done) {
+      const settingsParseResult = $Settings.safeParse(experimentSettingsJson);
+
+      // parse settings
+      if (!settingsParseResult.success) {
+        throw new Error("validation error, check experiment settings", {
+          cause: settingsParseResult.error,
+        });
+      }
+
+      translator.init();
+      translator.changeLanguage(settingsParseResult.data.language as Language);
       await pictureNamingTask(done);
     },
   },
@@ -36,5 +51,9 @@ export default defineInstrument({
     title: "Picture Naming Task",
   },
   measures: {},
-  validationSchema: $ExperimentResults,
+  validationSchema: z.object({
+    version: z.string(),
+    timestamp: z.string(),
+    experimentResults: z.array($ExperimentResults),
+  }),
 });

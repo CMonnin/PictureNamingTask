@@ -1,8 +1,6 @@
-import { createI18Next } from "/runtime/v1/@opendatacapture/runtime-core";
+import { Translator } from "/runtime/v1/@opendatacapture/runtime-core";
 
-document.documentElement.setAttribute("lang", "en");
-
-const i18n = createI18Next({
+export const translator = new Translator({
   translations: {
     welcome: {
       en: "Welcome. Press any key to begin",
@@ -116,9 +114,3 @@ const i18n = createI18Next({
     },
   },
 });
-// the whole i18n implementation needs to be changed
-document.addEventListener("changeLanguage", function (event) {
-  // @ts-expect-error the event does have a detail
-  document.documentElement.setAttribute("lang", event.detail as string);
-});
-export default i18n;

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@jspsych/plugin-html-button-response": "^2.0.1",
-    "@opendatacapture/runtime-v1": "latest"
+    "@opendatacapture/runtime-v1": "^1.8.2"
   },
   "devDependencies": {
     "@douglasneuroinformatics/eslint-config": "^4.3.1",

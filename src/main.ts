@@ -1,4 +1,9 @@
+import type { Language } from "@opendatacapture/runtime-v1/@opendatacapture/runtime-core/index.js";
+
+import { experimentSettingsCSV } from "./fetchAndParse.ts";
 import { pictureNamingTask } from "./pictureNamingTask";
+import { $Settings } from "./schemas";
+import { translator } from "./translator";
 
 import "/runtime/v1/jspsych@8.x/css/jspsych.css";
 
@@ -55,6 +60,11 @@ void (async () => {
     throw new Error("Failed to fetch and parse the experimentSettings.csv.");
   }
   if (parsedImageDB && parsedExperimentSettings) {
+    const settingsParseResult = $Settings.safeParse(experimentSettingsCSV);
+    // already checked it exists and passes safeParse so optional chaining ok
+    const language = settingsParseResult.data?.language;
+    translator.init();
+    translator.changeLanguage(language as Language);
     await pictureNamingTask();
   }
 })();
