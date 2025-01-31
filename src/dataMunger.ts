@@ -135,7 +135,7 @@ function exportToJsonSerializable(
       language: settings.language,
       numberOfLevels: settings.numberOfLevels,
       regressionSchedule: settings.regressionSchedule,
-      optionalSeed: settings.seed,
+      seed: settings.seed,
       totalNumberOfTrialsToRun: settings.totalNumberOfTrialsToRun,
     },
     experimentResults: data
@@ -145,7 +145,7 @@ function exportToJsonSerializable(
         correctResponse: result.correctResponse,
         difficultyLevel: result.difficultyLevel,
         language: result.language,
-        rt: result.participantResponseTime,
+        participantResponseTime: result.participantResponseTime,
         responseResult: result.responseResult,
         responseNotes: result.responseNotes,
         responseResultAsNumber: result.responseResultAsNumber,

@@ -55,5 +55,6 @@ export default defineInstrument({
     version: z.string(),
     timestamp: z.string(),
     experimentResults: z.array($ExperimentResults),
+    settings: $Settings,
   }),
 });
